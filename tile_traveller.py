@@ -36,6 +36,32 @@ def print_directions(directions_str):
             print("(W)est", end='')
         first = False
     print(".")
+
+def lever(prevcoins):
+    leverpull = input('Pull a lever (y/n): ').lower()
+
+    if leverpull == 'y':
+        print('You received 1 coin, your total is now {}.'.format(prevcoins+1))
+        coins = prevcoins +1
+    else:
+        coins = prevcoins
+    
+    return coins
+
+def islever(col, row, coins):
+    if col == 1 and row == 2:
+        newcoins = lever(coins)
+    elif col == 2 and row == 2:
+        newcoins = lever(coins)
+    elif col == 2 and row == 3:
+        newcoins = lever(coins)
+    elif col == 3 and row == 2:
+        newcoins = lever(coins)
+    else:
+        newcoins = coins
+    
+    return newcoins
+
         
 def find_directions(col, row):
     ''' Returns valid directions as a string given the supplied location '''
@@ -57,7 +83,7 @@ def find_directions(col, row):
         valid_directions = SOUTH+WEST
     return valid_directions
 
-def play_one_move(col, row, valid_directions):
+def play_one_move(col, row, valid_directions, coins):
     ''' Plays one move of the game
         Return if victory has been obtained and updated col,row '''
     victory = False
@@ -69,21 +95,22 @@ def play_one_move(col, row, valid_directions):
     else:
         col, row = move(direction, col, row)
         victory = is_victory(col, row)
-    return victory, col, row
+        coins = islever(col, row, coins)
+    return victory, col, row, coins
 
 # The main program starts here
 victory = False
 row = 1
 col = 1
+coins = 0
 
 valid_directions = NORTH
 print_directions(valid_directions)
 
 while not victory:
-    victory, col, row = play_one_move(col, row, valid_directions)
+    victory, col, row, coins = play_one_move(col, row, valid_directions, coins)
     if victory:
-        print("Victory!")
+        print("Victory! Total coins {}.".format(coins))
     else:
         valid_directions = find_directions(col, row)
         print_directions(valid_directions)
-        #comment
