@@ -1,3 +1,5 @@
+import random
+
 # Constants
 NORTH = 'n'
 EAST = 'e'
@@ -38,7 +40,9 @@ def print_directions(directions_str):
     print(".")
 
 def lever(prevcoins):
-    leverpull = input('Pull a lever (y/n): ').lower()
+    yesorno = ['y', 'n']
+    leverpull = random.choice(yesorno)
+    print('Pull a lever (y/n): {}'.format(leverpull))
 
     if leverpull == 'y':
         print('You received 1 coin, your total is now {}.'.format(prevcoins+1))
@@ -85,9 +89,11 @@ def find_directions(col, row):
 
 def play_one_move(col, row, valid_directions, coins):
     ''' Plays one move of the game
-        Return if victory has been obtained and updated col,row '''
+        Return if victory has been obtained and updated col,row ''' 
     victory = False
-    direction = input("Direction: ")
+    pickone = [NORTH, EAST, SOUTH, WEST]
+    direction = random.choice(pickone)
+    print("Direction: {}".format(direction))
     direction = direction.lower()
     
     if not direction in valid_directions:
@@ -102,19 +108,23 @@ def play_one_move(col, row, valid_directions, coins):
 play = True
 
 while play == True:
+    seed = int(input('Input seed: '))
+    random.seed(seed)
 
     victory = False
     row = 1
     col = 1
     coins = 0
+    moves = 0
 
     valid_directions = NORTH
     print_directions(valid_directions)
 
     while not victory:
         victory, col, row, coins = play_one_move(col, row, valid_directions, coins)
+        moves += 1
         if victory:
-            print("Victory! Total coins {}.".format(coins))
+            print("Victory! Total coins {}. Moves {}.".format(coins, moves))
             answer = input('Play again (y/n): ').lower()
 
             if answer == 'y':
